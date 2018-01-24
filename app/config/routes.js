@@ -1,9 +1,13 @@
 const errorsController = require( "../controllers/errorsController" );
 const usersController = require( "../controllers/usersController" );
+const chatController = require( "../controllers/chatController" );
+
 // add other controllers that are used
 
 const validateToken = require( "../middlewares/validateToken" );
 const authorize = require( "../middlewares/authorize" );
+const setChat = require( "../middlewares/setChat" );
+
 // add other middlewares that are used
 
 const express = require( "express" );
@@ -73,6 +77,12 @@ router.put( "/users/edit", authorize, validateToken, usersController.edit );
 *       }
 */
 router.delete( "/users/delete", authorize, validateToken, usersController.delete );
+
+router.post( "/chat/create", chatController.create );
+
+router.get( "/chat/messages", setChat, chatController.getMessages );
+
+router.delete( "/chat/messages/delete", setChat, chatController.delete );
 
 router.get( "/test", function( req, res ) {
     res.json( { success: true } );

@@ -10,9 +10,26 @@ const ENV = process.env.NODE_ENV || config.env;
 
 app.set( "env", ENV );
 
+const server = require( "http" ).Server( app );
+const io = require( "socket.io" )( server );
+
+io.on( "connection", function( server ){
+    console.log('a user connected');
+
+    socket.on( "chat message", function( msg ){
+      io.emit( "chat message", msg );
+    })  ;
+    socket.on('disconnect', function(){
+    console.log('user disconnected');
+    } );
+} );
+
+app.get('/', function( req, res ){
+    res.sendFile(__dirname + '/static/src/index.html');
+});
+
 require( "./models/user" );
-// add all models that are used in the app. Use require as below:
-// require( path to model )
+require( "./models/chat" );
 
 app.use( bodyParser.json( ) );
 app.use( customResponses );
